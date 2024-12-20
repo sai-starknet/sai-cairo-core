@@ -1,4 +1,4 @@
-# Sai - A fork in (a) dojo
+# Sai - A fork in (a) Dojo
 
 <img src="./resources/Sai.png"
      alt="Sai"
@@ -21,6 +21,12 @@ The core cairo library consists of serval parts:
 - Storage including interfacing with off chain
 - Permissions
 - Dns
+
+These parts can be used independently or combined either in single contracts or spread across multiple contracts. These can be configured in many different ways such as:
+
+- A single world that contains all storage and permissions and publishes information for the outside world.
+- Multiple contracts with a one controlling the storage, publishing and permissions with the others containing the systems. (The Dojo Model)
+- Multiple contracts each with there own storage and permissions with a single one controlling the publishing.
 
 ### Off chain indexer and database
 
@@ -86,7 +92,7 @@ Notes:
 
 - Users will define all the schemas they need (Not making ModelValues automatically)
 - Users will be in charge of making sure all schemas match up with typing and layout (in the future there could be some compile time checking)
-- Schemas with `#[sia::set]` cannot be read directly but `#[key]` can be by inputting them when reading then the read schemas can be cast.
+- Schemas with `#[sia::set]` cannot be read directly but `#[key]` can be by inputting them when reading then the read schemas can be cast. (I may add a function to read these directly later on via putting the values in at read time or defaulting them.)
 - Schemas can either have:
   - No keys.
   - A key that serializes down to a single felt.
