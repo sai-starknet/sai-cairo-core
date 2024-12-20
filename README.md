@@ -14,6 +14,8 @@ The high level parts of Sai will be:
 - Off chain indexer and database
 - Deployment system
 
+For the most part these bits can be used independently.
+
 ### Core cairo library
 
 The core cairo library consists of serval parts:
@@ -116,7 +118,7 @@ trait DatabaseAuthor<A> {
 fn writes_db<(Key, MySchema)>(ref self: A, table: felt252, models: Span<(Key, MySchema)>);
 fn writes_db<MySchema>(ref self: A, table: felt252, models: Span<MySchema>);
 
-// TODO: Define high level interface for tables and schemas to allow for easy usage
+// TODO: Define high level interface for tables and schemas to allow for easy usage with traits that attach table selectors to the schemas to allow for dojo like interfacing whilst still allowing for mod-ability
 ```
 
 ### Schema Traits
