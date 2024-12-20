@@ -4,8 +4,9 @@ use sai::{
     publisher::IPublisher
 };
 
+struct StoreAuthor {}
 #[derive(Drop, Copy)]
-struct LocalDatabase<P> {
+struct StoreAuthor<P> {
     publisher: P,
 }
 

@@ -3,6 +3,30 @@ pub mod contract {
     pub use contract::Contract;
 }
 
+pub mod store {
+    pub mod interface;
+    pub mod component;
+    pub use component::{IdWrite, IdSet, SetWrite, IdSetWrite, SchemaData};
+    pub use interface::{
+        IStoreSet, IStoreSetDispatcher, IStoreSetDispatcherTrait, IStoreWrite,
+        IStoreWriteDispatcher, IStoreWriteDispatcherTrait, IStoreSetWrite, IStoreSetWriteDispatcher,
+        IStoreSetWriteDispatcherTrait, IStoreRead, IStoreReadDispatcher, IStoreReadDispatcherTrait,
+    };
+}
+
+pub mod schema {
+    pub mod schema;
+    pub use schema::{Schema, Id};
+    pub mod model;
+    pub use model::ModelSerialized;
+}
+
+pub mod author {
+    pub mod author;
+    pub mod interface;
+    pub use interface::{IAuthor, IAuthorDispatcher, IAuthorDispatcherTrait};
+}
+
 pub mod database {
     pub mod database;
     pub mod entry;
@@ -10,7 +34,7 @@ pub mod database {
     pub mod table;
     pub mod interface;
     // pub mod namespaced;
-    pub use interface::{IDatabase, IDatabaseDispatcher, IDatabaseDispatcherTrait,};
+    pub use interface::{IDatabase, IDatabaseDispatcher, IDatabaseDispatcherTrait, SerializedEntity};
     pub use table::{DatabaseTable, Table};
 }
 
@@ -59,7 +83,9 @@ pub mod utils {
     pub use hash::{bytearray_hash, selector_from_names, selector_from_namespace_and_name};
 
     pub mod key;
-    pub use key::{entity_id_from_serialized_keys, combine_key, entity_id_from_keys};
+    pub use key::{
+        entity_id_from_serialized_keys, combine_key, entity_id_from_keys, entity_ids_from_keys
+    };
 
     pub mod layout;
     pub use layout::{find_field_layout, find_model_field_layout};

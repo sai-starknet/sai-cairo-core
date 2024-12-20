@@ -1,7 +1,8 @@
 use starknet::{SyscallResultTrait, syscalls::{emit_event_syscall}};
-use sai::utils::serialize_inline;
+use sai::{utils::serialize_inline, store::IdSet};
 
 const ENTITY_UPDATE_EVENT_SELECTOR: felt252 = 0;
+const ENTITIES_UPDATE_EVENT_SELECTOR: felt252 = 0;
 
 // impl SpanSerdeImpl of Serde<Span<felt252>> {
 //     fn serialize(self: @Span<felt252>, ref output: Array<felt252>) {
@@ -30,13 +31,11 @@ pub fn emit_entity_update_event(
 }
 
 pub fn emit_entities_update_event(
-    table: felt252,
-    indexes: Span<felt252>,
-    field_selectors: Span<felt252>,
-    values: Array<Span<felt252>>,
+    table: felt252, field_selectors: Span<felt252>, entities: Array<IdSet>,
 ) {
     emit_event_syscall(
-        [ENTITY_UPDATE_EVENT_SELECTOR, table].span(), serialize_inline(@(values, field_selectors)),
+        [ENTITIES_UPDATE_EVENT_SELECTOR, table].span(),
+        serialize_inline(@(field_selectors, entities)),
     )
         .unwrap_syscall();
 }

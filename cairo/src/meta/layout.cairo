@@ -7,6 +7,12 @@ pub struct FieldLayout {
 }
 
 #[derive(Copy, Drop, Serde, Debug, PartialEq)]
+enum W<T> {
+    #[default]
+    A: T
+}
+
+#[derive(Copy, Drop, Serde, Debug, PartialEq)]
 pub enum Layout {
     Fixed: Span<u8>,
     Struct: Span<FieldLayout>,
@@ -14,8 +20,8 @@ pub enum Layout {
     // We can't have `Layout` here as it will cause infinite recursion.
     // And `Box` is not serializable. So using a Span, even if it's to have
     // one element, does the trick.
-    Array: Span<Layout>,
-    FixedArray: (u32, Span<Layout>),
+    Array: W<Layout>,
+    FixedArray: W<(Layout, u32)>,
     ByteArray,
     // there is one layout per variant.
     // the `selector` field identifies the variant
@@ -23,22 +29,7 @@ pub enum Layout {
     Enum: Span<FieldLayout>,
 }
 
-// impl LayoutSerde of Serde<Layout> {
-//     fn serialize(self: @Layout, ref output: Array<felt252>) {
-//         let values = ArrayTrait::<felt252>::new();
-//         match self {
-//             Layout::Array(layout) => {},
-//             Layout::FixedArray(layout) => {},
-//         }
-//     }
-
-//     fn deserialize(ref serialized: Span<felt252>) -> Option<Layout> {
-//         Deserialize::deserialize(ref serialized)
-//     }
-// }
-
 type Schema = Span<FieldLayout>;
-
 
 #[generate_trait]
 pub impl LayoutCompareImpl of LayoutCompareTrait {
@@ -48,6 +39,7 @@ pub impl LayoutCompareImpl of LayoutCompareTrait {
             (Layout::Struct(_), Layout::Struct(_)) => true,
             (Layout::Tuple(_), Layout::Tuple(_)) => true,
             (Layout::Array(_), Layout::Array(_)) => true,
+            (Layout::FixedArray(_), Layout::FixedArray(_)) => true,
             (Layout::ByteArray, Layout::ByteArray) => true,
             (Layout::Enum(_), Layout::Enum(_)) => true,
             _ => false
