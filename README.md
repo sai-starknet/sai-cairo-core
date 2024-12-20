@@ -102,7 +102,7 @@ Notes:
 
 ### Authors
 
-The Authors is intended as the high level interface use by most devs when reading writing and setting data. The table selector can be
+The Authors is intended as the high level interface use by most devs when reading writing and setting data. `A` in this context will be a struct with the [IStoreSetWrite and IStoreRead](#interfaces) traits implemented.
 
 ```rust
 trait DatabaseAuthor<A> {
