@@ -104,9 +104,11 @@ trait DatabaseAuthor<A> {
     fn reads_db<K, S>(self: @A, table: felt252, keys: Span<K>) -> Array<S>;
     fn write_db<S>(ref self: A, table: felt252, model: S);
     fn writes_db<S>(ref self: A, table: felt252, models: Span<S>);
-    fn write_keys_db<K, S>(ref self: A, table: felt252, keys: K, entity: @S);
-    fn writes_keys_db<K, S>(ref self: A, table: felt252, entities: Span<(K, S)>);
 }
+
+// write and writes could look like either by making some clever impls depending if the Model has an Id trait or not:
+fn writes_db<(Key, MySchema)>(ref self: A, table: felt252, models: Span<(Key, MySchema)>);
+fn writes_db<MySchema>(ref self: A, table: felt252, models: Span<MySchema>);
 
 // TODO: Define high level interface for tables and schemas to allow for easy usage
 ```
