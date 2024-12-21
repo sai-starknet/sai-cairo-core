@@ -86,7 +86,7 @@ pub impl StaticSchemaGeneratedImpl<
         SELECTOR
     }
     fn schema_data() -> SchemaData {
-        SchemaData { selector: Self::selector(), write: Self::write_field_layouts(), }
+        SchemaData { selector: Self::selector(), field_layouts: Self::write_field_layouts(), }
     }
     fn set_selectors() -> Span<felt252> {
         SchemaGenerate::<T>::_set_selectors()
