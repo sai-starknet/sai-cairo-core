@@ -1,6 +1,6 @@
 //! Storage operations for models and entities.
 
-use sai::meta::{Layout, Schema};
+use sai::meta::{Layout, FieldLayout};
 
 /// Write a new entity.
 ///
@@ -29,11 +29,16 @@ pub fn write_model_entity(
     };
 }
 
-pub fn write_entity_from_schema(
-    model_selector: felt252, entity_id: felt252, schema: Schema, values: Span<felt252>
+pub fn write_entity_from_field_layouts(
+    model_selector: felt252,
+    field_layouts: Span<FieldLayout>,
+    entity_id: felt252,
+    values: Span<felt252>
 ) {
     let mut offset = 0;
-    super::layout::write_struct_layout(model_selector, entity_id, values, ref offset, schema);
+    super::layout::write_struct_layout(
+        model_selector, entity_id, values, ref offset, field_layouts
+    );
 }
 
 /// Delete an entity.
@@ -42,24 +47,23 @@ pub fn write_entity_from_schema(
 ///   * `model_selector` - the model selector
 ///   * `entity_id` - the ID of the entity to remove.
 ///   * `layout` - the model layout
-pub fn delete_model_entity(model_selector: felt252, entity_id: felt252, layout: Layout) {
-    match layout {
-        Layout::Fixed(layout) => {
-            super::layout::delete_fixed_layout(model_selector, entity_id, layout);
-        },
-        Layout::Struct(layout) => {
-            super::layout::delete_struct_layout(model_selector, entity_id, layout);
-        },
-        _ => { panic!("Unexpected layout type for a model."); }
-    };
-}
+// pub fn delete_model_entity(model_selector: felt252, entity_id: felt252, layout: Layout) {
+//     match layout {
+//         Layout::Fixed(layout) => {
+//             super::layout::delete_fixed_layout(model_selector, entity_id, layout);
+//         },
+//         Layout::Struct(layout) => {
+//             super::layout::delete_struct_layout(model_selector, entity_id, layout);
+//         },
+//         _ => { panic!("Unexpected layout type for a model."); }
+//     };
+// }
 
-
-pub fn read_entity_from_schema(
-    model_selector: felt252, entity_id: felt252, schema: Schema
+pub fn read_entity_from_field_layouts(
+    model_selector: felt252, field_layouts: Span<FieldLayout>, entity_id: felt252
 ) -> Span<felt252> {
     let mut read_data = ArrayTrait::<felt252>::new();
-    super::layout::read_struct_layout(model_selector, entity_id, ref read_data, schema);
+    super::layout::read_struct_layout(model_selector, entity_id, ref read_data, field_layouts);
     read_data.span()
 }
 /// Read an entity.

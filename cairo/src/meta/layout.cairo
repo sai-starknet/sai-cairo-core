@@ -1,15 +1,9 @@
-use sai::storage::packing::calculate_packed_size;
+use sai::{storage::packing::calculate_packed_size, utils::A};
 
 #[derive(Copy, Drop, Serde, Debug, PartialEq)]
 pub struct FieldLayout {
     pub selector: felt252,
     pub layout: Layout
-}
-
-#[derive(Copy, Drop, Debug, PartialEq)]
-enum A<T> {
-    #[default]
-    T: T
 }
 
 #[derive(Copy, Drop, Serde, Debug, PartialEq)]
@@ -29,22 +23,6 @@ pub enum Layout {
     Enum: Span<FieldLayout>,
 }
 
-impl ASerdeImpl<T, +Serde<T>> of Serde<A<T>> {
-    fn serialize(self: @A<T>, ref output: Array<felt252>) {
-        match self {
-            A::T(t) => { Serde::<T>::serialize(t, ref output); }
-        }
-    }
-
-    fn deserialize(ref serialized: Span<felt252>) -> Option<A<T>> {
-        match Serde::<T>::deserialize(ref serialized) {
-            Option::Some(t) => Option::Some(A::T(t)),
-            Option::None => Option::None
-        }
-    }
-}
-
-type Schema = Span<FieldLayout>;
 
 #[generate_trait]
 pub impl LayoutCompareImpl of LayoutCompareTrait {
@@ -71,29 +49,6 @@ pub fn compute_packed_size(layout: Layout) -> Option<usize> {
         Option::Some(calculate_packed_size(ref span_layout))
     } else {
         Option::None
-    }
-}
-
-trait GetSelectors<T> {
-    fn get_selectors(self: @T) -> Span<felt252>;
-}
-
-impl LayoutStructImpl of GetSelectors<Layout> {
-    fn get_selectors(self: @Layout) -> Span<felt252> {
-        match self {
-            Layout::Struct(fields) => { fields.get_selectors() },
-            _ => panic!("Unexpected model layout")
-        }
-    }
-}
-
-impl FieldLayoutsImpl of GetSelectors<Schema> {
-    fn get_selectors(self: @Schema) -> Span<felt252> {
-        let mut selectors = ArrayTrait::<felt252>::new();
-        for field in *self {
-            selectors.append(*field.selector);
-        };
-        selectors.span()
     }
 }
 

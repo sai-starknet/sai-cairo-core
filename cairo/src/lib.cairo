@@ -16,14 +16,12 @@ pub mod store {
 
 pub mod schema {
     pub mod schema;
-    pub use schema::{Schema, SchemaId, SchemaSanId};
+    pub use schema::{Schema, SchemaId};
 }
 
 pub mod author {
     pub mod author;
     pub mod utils;
-    pub mod interface;
-    pub use interface::{IAuthor, IAuthorDispatcher, IAuthorDispatcherTrait};
 }
 
 // pub mod database {
@@ -37,8 +35,7 @@ pub mod author {
 // }
 
 pub mod external {
-    pub mod database;
-    pub mod publisher;
+    pub mod store;
 }
 
 pub mod publisher {
@@ -68,6 +65,9 @@ pub mod storage {
 }
 
 pub mod utils {
+    pub mod flat_enum;
+    pub use flat_enum::{A};
+
     pub mod hash;
     pub use hash::{bytearray_hash, selector_from_names, selector_from_namespace_and_name};
 
@@ -94,8 +94,9 @@ pub mod world {
 }
 
 pub mod local {
-    pub mod database;
-    pub mod publisher;
+    pub mod store;
+    // pub mod database;
+// pub mod publisher;
 }
 
 pub mod permissions {

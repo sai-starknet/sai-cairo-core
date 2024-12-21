@@ -1,7 +1,7 @@
 use sai::{schema::{Schema, SchemaId}, store::IdSetWrite};
 
 
-pub fn entities_to_schemas<K, M, +Drop<K>, +Drop<M>, +Schema<M>, +Drop<Schema::<M>::Keys>>(
+pub fn entities_to_schemas<K, M, +Drop<K>, +Serde<K>, +Drop<M>, +Schema<M>>(
     mut keys: Array<K>, mut entities: Array<Span<felt252>>
 ) -> Array<M> {
     let mut schemas = ArrayTrait::<M>::new();
@@ -9,7 +9,7 @@ pub fn entities_to_schemas<K, M, +Drop<K>, +Drop<M>, +Schema<M>, +Drop<Schema::<
         match (keys.pop_front(), entities.pop_front()) {
             (
                 Option::Some(key), Option::Some(entity)
-            ) => { schemas.append(Schema::<M>::from_keys_and_serialized(key, entity, [].span())); },
+            ) => { schemas.append(Schema::<M>::from_k_and_serialized(key, entity, [].span())); },
             _ => { break; }
         }
     };

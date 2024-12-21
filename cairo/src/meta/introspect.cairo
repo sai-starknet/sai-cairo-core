@@ -1,5 +1,6 @@
 use sai::meta::{Layout};
 use sai::storage::packing;
+use sai::utils::A;
 
 #[derive(Copy, Drop, Serde, Debug, PartialEq)]
 pub enum Ty {
@@ -10,8 +11,8 @@ pub enum Ty {
     // We can't have `Ty` here as it will cause infinite recursion.
     // And `Box` is not serializable. So using a Span, even if it's to have
     // one element, does the trick.
-    Array: Span<Ty>,
-    FixedArray: Span<(u32, Ty)>,
+    Array: A<Ty>,
+    FixedArray: A<(Ty, u32)>,
     ByteArray,
 }
 
@@ -292,11 +293,11 @@ pub impl Introspect_array<T, +Introspect<T>> of Introspect<Array<T>> {
         Option::None
     }
     fn layout() -> Layout {
-        Layout::Array([Introspect::<T>::layout()].span())
+        Layout::Array(Introspect::<T>::layout().into())
     }
 
     fn ty() -> Ty {
-        Ty::Array([Introspect::<T>::ty()].span())
+        Ty::Array(Introspect::<T>::ty().into())
     }
 }
 
@@ -305,13 +306,11 @@ pub impl Introspect_span<T, +Introspect<T>> of Introspect<Span<T>> {
         Option::None
     }
     fn layout() -> Layout {
-        Layout::Array([Introspect::<T>::layout()].span())
+        Layout::Array(Introspect::<T>::layout().into())
     }
 
     fn ty() -> Ty {
-        Ty::Array([Introspect::<T>::ty()].span())
+        Ty::Array(Introspect::<T>::ty().into())
     }
 }
-
-pub impl Introspect_
 

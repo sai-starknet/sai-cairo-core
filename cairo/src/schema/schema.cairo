@@ -20,8 +20,10 @@ pub trait Schema<T> {
     fn write_serialized(self: @T) -> Span<felt252>;
     fn serialize_write(self: @T, ref output: Array<felt252>);
     fn from_keys_and_serialized(keys: Self::Keys, write: Span<felt252>, set: Span<felt252>) -> T;
+    fn from_k_and_serialized<K, +Serde<K>, +Drop<K>>(
+        key: K, write: Span<felt252>, set: Span<felt252>
+    ) -> T;
     fn set_write(self: @T) -> SetWrite;
-    fn parse_keys<K, +Serde<K>, +Drop<K>>(key: K) -> Self::Keys;
 }
 
 /// Code generated for every schema
@@ -37,10 +39,6 @@ pub trait SchemaGenerate<T> {
     fn _parse_keys<KI, KO>(key: KI) -> KO;
 }
 
-/// On Schemas without Ids
-pub trait SchemaSanId<T> {
-    fn from_serialized(write: Span<felt252>, set: Span<felt252>) -> T;
-}
 
 /// Only on schemas with an id or field/s with key
 pub trait SchemaId<T> {
@@ -124,17 +122,17 @@ pub impl StaticSchemaGeneratedImpl<
     fn from_keys_and_serialized(keys: K, write: Span<felt252>, set: Span<felt252>) -> T {
         SchemaGenerate::_from_keys_and_serialized(keys, write, set)
     }
+    fn from_k_and_serialized<K, +Serde<K>, +Drop<K>>(
+        key: K, write: Span<felt252>, set: Span<felt252>
+    ) -> T {
+        SchemaGenerate::<T>::_from_keys_and_serialized(key, write, set)
+    }
     fn set_write(self: @T) -> SetWrite {
         SetWrite { set: Self::set_serialized(self), write: Self::write_serialized(self) }
     }
-    fn parse_keys<K, +Serde<K>, +Drop<K>>(key: K) -> Self::Keys {
-        SchemaGenerate::<T>::_parse_keys(key)
-    }
 }
 
-impl KeySchemaTupleSchemaImpl<
-    K, T, +Serde<K>, +Drop<K>, +Schema<T>, +SchemaSanId<T>
-> of Schema<(K, T)> {
+impl KeySchemaTupleSchemaImpl<K, T, +Serde<K>, +Drop<K>, +Schema<T>> of Schema<(K, T)> {
     type Keys = K;
     fn table_selector() -> felt252 {
         Schema::<T>::table_selector()
@@ -180,14 +178,16 @@ impl KeySchemaTupleSchemaImpl<
         Schema::<T>::serialize_write(t, ref output);
     }
     fn from_keys_and_serialized(keys: K, write: Span<felt252>, set: Span<felt252>) -> (K, T) {
-        (keys, SchemaSanId::<T>::from_serialized(write, set))
+        (keys, Schema::<T>::from_k_and_serialized((), write, set))
+    }
+    fn from_k_and_serialized<K, +Serde<K>, +Drop<K>>(
+        key: K, write: Span<felt252>, set: Span<felt252>
+    ) -> (Self::Keys, T) {
+        panic!("Cannot read into a tuple type")
     }
     fn set_write(self: @(K, T)) -> SetWrite {
         let (_, t) = self;
         Schema::<T>::set_write(t)
-    }
-    fn parse_keys<K, +Serde<K>, +Drop<K>>(key: K) -> Self::Keys {
-        panic!("Not implemented")
     }
 }
 

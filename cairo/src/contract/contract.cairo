@@ -19,3 +19,4 @@ pub impl ContractIntoContractAddress of Into<Contract, ContractAddress> {
 pub struct Contract {
     contract_address: ContractAddress,
 }
+

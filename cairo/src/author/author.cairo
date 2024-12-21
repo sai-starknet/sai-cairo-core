@@ -5,10 +5,8 @@ use sai::{
 
 
 trait DatabaseAuthor<A> {
-    fn read<K, M, +Serde<K>, +Drop<K>, +Schema<M>, +Drop<Schema::<M>::Keys>>(
-        self: @A, table: felt252, keys: K
-    ) -> M;
-    fn reads<K, M, +Serde<K>, +Drop<K>, +Schema<M>, +Drop<M>, +Drop<Schema::<M>::Keys>>(
+    fn read<K, M, +Serde<K>, +Drop<K>, +Schema<M>>(self: @A, table: felt252, keys: K) -> M;
+    fn reads<K, M, +Serde<K>, +Drop<K>, +Schema<M>, +Drop<M>>(
         self: @A, table: felt252, keys: Array<K>
     ) -> Array<M>;
     fn write<M, +Drop<M>, +SchemaId<M>, +Schema<M>>(ref self: A, table: felt252, model: M);
@@ -17,17 +15,15 @@ trait DatabaseAuthor<A> {
 
 
 impl StorageAuthorImpl<A, +Drop<A>, +IStoreSetWrite<A>, +IStoreRead<A>> of DatabaseAuthor<A> {
-    fn read<K, M, +Serde<K>, +Drop<K>, +Schema<M>, +Drop<Schema::<M>::Keys>>(
-        self: @A, table: felt252, keys: K
-    ) -> M {
+    fn read<K, M, +Serde<K>, +Drop<K>, +Schema<M>>(self: @A, table: felt252, keys: K) -> M {
         let serialized = self
             .store_read_entity(
                 table, Schema::<M>::write_field_layouts(), entity_id_from_keys(@keys)
             );
-        let keys = Schema::<M>::parse_keys(keys);
-        Schema::<M>::from_keys_and_serialized(keys, serialized, [].span())
+
+        Schema::<M>::from_k_and_serialized(keys, serialized, [].span())
     }
-    fn reads<K, M, +Drop<K>, +Serde<K>, +Schema<M>, +Drop<M>, +Drop<Schema::<M>::Keys>>(
+    fn reads<K, M, +Drop<K>, +Serde<K>, +Schema<M>, +Drop<M>>(
         self: @A, table: felt252, keys: Array<K>
     ) -> Array<M> {
         let entity_ids = entity_ids_from_keys(keys.span());
