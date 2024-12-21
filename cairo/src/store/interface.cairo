@@ -26,7 +26,9 @@ pub trait IStoreSetWrite<S> {
         set: Span<felt252>,
         write: Span<felt252>
     );
-    fn store_set_write_entities(self: @S, table: felt252, schema: SchemaData, entities: IdSetWrite);
+    fn store_set_write_entities(
+        self: @S, table: felt252, schema: SchemaData, entities: Array<IdSetWrite>
+    );
 }
 
 #[starknet::interface]

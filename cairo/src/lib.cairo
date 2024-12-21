@@ -23,6 +23,7 @@ pub mod schema {
 
 pub mod author {
     pub mod author;
+    pub mod utils;
     pub mod interface;
     pub use interface::{IAuthor, IAuthorDispatcher, IAuthorDispatcherTrait};
 }

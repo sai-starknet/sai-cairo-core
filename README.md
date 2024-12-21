@@ -62,7 +62,7 @@ Tables are comparable to dojo Models but they are meant to be rarely used direct
 Schemas are parts of a table that are used to directly read and write from chain and emit events. The distinction between tables and schemas allows for much more effient storage on and off chain buy only reading, writing and setting the nessasary values.
 
 ```rust
-#[sia::table]
+#[sia::table(selector=0x)]
 struct ATable{
     key_1: felt252,
     key_2: felt252,
@@ -72,12 +72,34 @@ struct ATable{
     a_struct: MyStruct,
 }
 
-#[sia::schema]
+#[sia::schema(table=0x)]
 struct MySchema {
     #[key]
     key_1: felt252,
     #[key]
     key_2: felt252,
+    #[sia::set]
+    pub_value: felt252,
+    write_value: felt252
+}
+
+#[sia::schema(table=0x)]
+struct MySchema2 {
+    #[key]
+    key_1: felt252,
+    #[key]
+    key_2: felt252,
+    #[sia::set]
+    pub_value: felt252,
+    write_value: felt252
+}
+
+
+
+#[sia::schema]
+struct MySchema2 {
+    #[key]
+    id: felt252,
     #[sia::set]
     pub_value: felt252,
     write_value: felt252
@@ -99,6 +121,12 @@ Notes:
   - No keys.
   - A key that serializes down to a single felt.
   - A key or keys that serializes down to multiple felts.
+
+### macros
+
+### table
+
+The table macro is most for off chain use but can contain a const selector
 
 ## High level usage
 
@@ -223,7 +251,7 @@ pub trait IStoreSetWrite<S> {
         set: Span<felt252>,
         write: Span<felt252>
     );
-    fn store_set_write_entities(self: @S, table: felt252, schema: SchemaData, entities: IdSetWrite);
+    fn store_set_write_entities(self: @S, table: felt252, schema: SchemaData, entities: Span<IdSetWrite>);
 }
 
 #[starknet::interface]
