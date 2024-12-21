@@ -27,7 +27,7 @@ pub struct IdSetWrite {
 
 #[derive(Drop, Serde)]
 pub struct SchemaData {
-    selector: felt252,
-    write: Span<FieldLayout>,
+    pub selector: felt252,
+    pub write: Span<FieldLayout>,
 }
 

@@ -16,9 +16,7 @@ pub mod store {
 
 pub mod schema {
     pub mod schema;
-    pub use schema::{Schema, Id};
-    pub mod model;
-    pub use model::ModelSerialized;
+    pub use schema::{Schema, SchemaId, SchemaSanId};
 }
 
 pub mod author {
@@ -28,16 +26,15 @@ pub mod author {
     pub use interface::{IAuthor, IAuthorDispatcher, IAuthorDispatcherTrait};
 }
 
-pub mod database {
-    pub mod database;
-    pub mod entry;
-    pub use database::{DatabaseTrait, TableTrait, TableImpl, DatabaseInterface};
-    pub mod table;
-    pub mod interface;
-    // pub mod namespaced;
-    pub use interface::{IDatabase, IDatabaseDispatcher, IDatabaseDispatcherTrait, SerializedEntity};
-    pub use table::{DatabaseTable, Table};
-}
+// pub mod database {
+//     pub mod database;
+//     pub mod entry;
+//     pub use database::{DatabaseTrait, TableTrait, TableImpl, DatabaseInterface};
+//     pub mod table;
+//     pub mod interface;
+//     pub use interface::{IDatabase, IDatabaseDispatcher, IDatabaseDispatcherTrait};
+//     pub use table::{DatabaseTable, Table};
+// }
 
 pub mod external {
     pub mod database;
@@ -55,20 +52,11 @@ pub mod event {
 }
 
 pub mod meta {
-    pub mod interface;
-    pub use interface::{
-        IDeployedResource, IDeployedResourceDispatcher, IDeployedResourceDispatcherTrait,
-        IStoredResource, IStoredResourceDispatcher, IStoredResourceDispatcherTrait
-    };
-
     pub mod introspect;
     pub use introspect::{Introspect, Ty, StructCompareTrait};
 
     pub mod layout;
     pub use layout::{Layout, FieldLayout, LayoutCompareTrait};
-
-    pub mod schema;
-    pub use schema::{SchemaTrait, Schema};
 }
 
 pub mod storage {

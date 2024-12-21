@@ -34,10 +34,11 @@ These parts can be used independently or combined either in single contracts or 
 
 This allows for easy reading and reading of chain storage by off chain components. The major parts are
 
-- Indexer
-- Database populator
+- Indexer -> read events convert to structured data (protobuf?)
+- Database populator -> protobuf into database
 - Database
-- External database interface
+- External database interface -> Grpc/Grpahql/Sql Query
+- Optional: external database writing
 
 ### Deployment system
 

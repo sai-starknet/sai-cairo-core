@@ -1,7 +1,7 @@
-use sai::{schema::{Schema, Id}, store::IdSetWrite};
+use sai::{schema::{Schema, SchemaId}, store::IdSetWrite};
 
 
-pub fn entities_to_schemas<K, M, +Drop<K>, +Drop<M>, +Schema<M>>(
+pub fn entities_to_schemas<K, M, +Drop<K>, +Drop<M>, +Schema<M>, +Drop<Schema::<M>::Keys>>(
     mut keys: Array<K>, mut entities: Array<Span<felt252>>
 ) -> Array<M> {
     let mut schemas = ArrayTrait::<M>::new();
@@ -16,7 +16,7 @@ pub fn entities_to_schemas<K, M, +Drop<K>, +Drop<M>, +Schema<M>>(
     schemas
 }
 
-pub fn schemas_to_id_set_write<M, +Id<M>, +Drop<M>>(entities: Array<M>) -> Array<IdSetWrite> {
+pub fn schemas_to_id_set_write<M, +SchemaId<M>, +Drop<M>>(entities: Array<M>) -> Array<IdSetWrite> {
     let mut array = ArrayTrait::<IdSetWrite>::new();
     for entity in entities {
         array.append(entity.id_set_write());
