@@ -91,16 +91,16 @@ pub impl ILocalStoreSetWrite<P, +IStoreSet<P>, +Drop<P>> of IStoreSetWrite<Local
 
 pub impl ILocalStoreRead<P, +IStoreSet<P>> of IStoreRead<LocalReadWriter<P>> {
     fn store_read_entity(
-        self: @LocalReadWriter<P>, table: felt252, fields: Array<FieldLayout>, id: felt252
+        self: @LocalReadWriter<P>, table: felt252, fields: Span<FieldLayout>, id: felt252
     ) -> Span<felt252> {
-        read_entity_from_field_layouts(table, fields.span(), id)
+        read_entity_from_field_layouts(table, fields, id)
     }
     fn store_read_entities(
-        self: @LocalReadWriter<P>, table: felt252, fields: Array<FieldLayout>, ids: Span<felt252>
+        self: @LocalReadWriter<P>, table: felt252, fields: Span<FieldLayout>, ids: Span<felt252>
     ) -> Array<Span<felt252>> {
         let mut entities = ArrayTrait::<Span<felt252>>::new();
         for id in ids {
-            entities.append(read_entity_from_field_layouts(table, fields.span(), *id));
+            entities.append(read_entity_from_field_layouts(table, fields, *id));
         };
         entities
     }

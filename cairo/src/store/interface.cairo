@@ -38,9 +38,9 @@ pub trait IStoreSetWrite<S> {
 #[starknet::interface]
 pub trait IStoreRead<S> {
     fn store_read_entity(
-        self: @S, table: felt252, fields: Array<FieldLayout>, id: felt252
+        self: @S, table: felt252, fields: Span<FieldLayout>, id: felt252
     ) -> Span<felt252>;
     fn store_read_entities(
-        self: @S, table: felt252, fields: Array<FieldLayout>, ids: Span<felt252>
+        self: @S, table: felt252, fields: Span<FieldLayout>, ids: Span<felt252>
     ) -> Array<Span<felt252>>;
 }

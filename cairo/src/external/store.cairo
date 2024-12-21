@@ -66,13 +66,13 @@ pub impl IContractStoreSetWrite of IStoreSetWrite<Contract> {
 
 pub impl IContractStoreRead of IStoreRead<Contract> {
     fn store_read_entity(
-        self: @Contract, table: felt252, fields: Array<FieldLayout>, id: felt252
+        self: @Contract, table: felt252, fields: Span<FieldLayout>, id: felt252
     ) -> Span<felt252> {
         IStoreReadDispatcher { contract_address: (*self).into() }
             .store_read_entity(table, fields, id)
     }
     fn store_read_entities(
-        self: @Contract, table: felt252, fields: Array<FieldLayout>, ids: Span<felt252>
+        self: @Contract, table: felt252, fields: Span<FieldLayout>, ids: Span<felt252>
     ) -> Array<Span<felt252>> {
         IStoreReadDispatcher { contract_address: (*self).into() }
             .store_read_entities(table, fields, ids)
@@ -139,12 +139,12 @@ pub impl IContractAddressStoreSetWrite of IStoreSetWrite<ContractAddress> {
 
 pub impl IContractAddressStoreRead of IStoreRead<ContractAddress> {
     fn store_read_entity(
-        self: @ContractAddress, table: felt252, fields: Array<FieldLayout>, id: felt252
+        self: @ContractAddress, table: felt252, fields: Span<FieldLayout>, id: felt252
     ) -> Span<felt252> {
         IStoreReadDispatcher { contract_address: *self }.store_read_entity(table, fields, id)
     }
     fn store_read_entities(
-        self: @ContractAddress, table: felt252, fields: Array<FieldLayout>, ids: Span<felt252>
+        self: @ContractAddress, table: felt252, fields: Span<FieldLayout>, ids: Span<felt252>
     ) -> Array<Span<felt252>> {
         IStoreReadDispatcher { contract_address: *self }.store_read_entities(table, fields, ids)
     }
