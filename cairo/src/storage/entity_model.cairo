@@ -41,24 +41,6 @@ pub fn write_entity_from_field_layouts(
     );
 }
 
-/// Delete an entity.
-///
-/// # Arguments
-///   * `model_selector` - the model selector
-///   * `entity_id` - the ID of the entity to remove.
-///   * `layout` - the model layout
-// pub fn delete_model_entity(model_selector: felt252, entity_id: felt252, layout: Layout) {
-//     match layout {
-//         Layout::Fixed(layout) => {
-//             super::layout::delete_fixed_layout(model_selector, entity_id, layout);
-//         },
-//         Layout::Struct(layout) => {
-//             super::layout::delete_struct_layout(model_selector, entity_id, layout);
-//         },
-//         _ => { panic!("Unexpected layout type for a model."); }
-//     };
-// }
-
 pub fn read_entity_from_field_layouts(
     model_selector: felt252, field_layouts: Span<FieldLayout>, entity_id: felt252
 ) -> Span<felt252> {

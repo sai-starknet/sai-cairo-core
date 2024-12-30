@@ -38,11 +38,11 @@ pub mod external {
     pub mod store;
 }
 
-pub mod publisher {
-    pub mod publisher;
-    pub mod interface;
-    pub use interface::{IPublisher, IPublisherDispatcher, IPublisherDispatcherTrait};
-}
+// pub mod publisher {
+//     pub mod publisher;
+//     pub mod interface;
+//     pub use interface::{IPublisher, IPublisherDispatcher, IPublisherDispatcherTrait};
+// }
 
 pub mod event {
     pub mod storage;
@@ -90,7 +90,7 @@ pub mod utils {
 }
 
 pub mod world {
-    pub mod publisher;
+    // pub mod publisher;
 }
 
 pub mod local {

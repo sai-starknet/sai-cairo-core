@@ -115,9 +115,7 @@ pub fn write_fixed_array_layout(
     // and then, write array items
     for i in 0
         ..array_len {
-            let key = combine_key(key, i.into());
-
-            write_layout(model, key, values, ref offset, item_layout);
+            write_layout(model, combine_key(key, i.into()), values, ref offset, item_layout);
         };
 }
 
@@ -429,17 +427,10 @@ pub fn read_fixed_array_layout(
 
     read_data.append(array_len.into());
 
-    let mut i = 0;
-    loop {
-        if i >= array_len {
-            break;
-        }
-
-        let field_key = combine_key(key, i.into());
-        read_layout(model, field_key, ref read_data, item_layout);
-
-        i += 1;
-    };
+    for i in 0
+        ..array_len {
+            read_layout(model, combine_key(key, i.into()), ref read_data, item_layout);
+        };
 }
 
 ///
